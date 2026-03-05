@@ -1,0 +1,9 @@
+{
+  "id": "persistent-memory",
+  "name": "Persistent Memory",
+  "version": "1.0.0",
+  "description": "Always-on persistent memory system with tiered architecture",
+  "author": "Kayorama",
+  "keywords": ["memory", "persistent", "always-on", "tiered", "context"],
+  "entry": "SKILL.md"
+}
