@@ -17,46 +17,47 @@ Personal Dutch-language website for writer Annemieke. Warm, book-like reading ex
 4. **…over zichzelf** — about herself (life chapters: school, huwelijk, kinderen, carrière)
 
 ## Key Features
-- **Page-turn animation** — book-like reading experience
+- **Page-turn animation** — 3D book-opening effect with Framer Motion
 - **Card grid layout** — for columns, stories, about sections
 - **Audio player** — for hardop section
 - **Mailing list** — subscribe with email, admin can send newsletters
-- **Admin panel** — simple, non-technical user friendly
+- **Admin panel** — simple, non-technical user friendly (PayloadCMS)
 
 ## Tech Stack
-- **Frontend:** Astro 5 (static site)
-- **CMS:** PayloadCMS (already configured)
+- **Frontend:** Astro 5 + React + Tailwind
+- **CMS:** PayloadCMS (Dutch labels, simplified UX)
+- **Animations:** Framer Motion (page-turn, hover effects)
+- **Email:** Resend (newsletter system)
 - **Database:** PostgreSQL
-- **Animations:** Framer Motion (page-turn effects)
-- **Email:** Resend (already configured)
-- **Deployment:** Coolify
+- **Deployment:** Coolify (ready for deployment)
 
 ## Current Status
-🆕 New project — needs full implementation
+✅ **COMPLETE** — All features implemented
+
+## Completed Work
+| Component | Status |
+|-----------|--------|
+| Homepage | ✅ Header, tagline, 4 category tiles, newsletter signup |
+| Frontend | ✅ 4 section pages, card grids, dynamic routes |
+| Page-turn Animation | ✅ 3D book-opening effect, Framer Motion |
+| Design System | ✅ Warm palette (creams, browns, gold), serif typography |
+| CMS | ✅ Collections (Columns, Stories, Audio, About, Subscribers, Newsletter) |
+| Admin UX | ✅ Dutch labels, emoji groups, simplified for non-technical users |
+| Audio | ✅ Audio player with progress, volume, controls |
+| Email | ✅ Subscription forms, Resend integration, CSV export, test emails |
+| Newsletter | ✅ Admin can compose and send newsletters |
 
 ## File Paths
 | Component | Location |
 |-----------|----------|
+| Frontend | ~/.openclaw/workspace/annemiekevertelt/apps/web/ |
 | CMS | ~/.openclaw/workspace/annemiekevertelt/apps/cms/ |
-| Web | ~/.openclaw/workspace/annemiekevertelt/apps/web/ |
 | Collections | ~/.openclaw/workspace/annemiekevertelt/apps/cms/collections/ |
 
-## Admin Requirements
-- Create/edit/delete posts (all 4 sections)
-- Upload images and audio
-- Publish or save drafts
-- View/export mailing list
-- Send newsletter emails
-- **Simplicity priority** — WordPress-level ease, not dev dashboard
-
-## Content Collections (PayloadCMS)
-- Columns
-- ChildrensStories
-- AudioContent  
-- AboutMe (life chapters)
-- Subscribers
-- NewsletterTemplates
-- Media
+## Next Steps
+- [ ] Deploy to Coolify
+- [ ] Add sample content
+- [ ] Domain configuration
 
 ## Related
 - Daily Log: memory/2026-03-05.md
