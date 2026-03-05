@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: annemieke-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - annemieke-network
+    restart: unless-stopped
+
+  payload:
+    build:
+      context: .
+      dockerfile: apps/cms/Dockerfile.production
+    container_name: annemieke-cms
+    environment:
+      DATABASE_URI: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      PAYLOAD_URL: https://cms.annemiekevertelt.nl
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - annemieke-network
+    restart: unless-stopped
+    # Run migrations on startup, then start the app
+    command: >
+      sh -c "cd /app/apps/cms && 
+             npx payload migrate && 
+             pnpm start"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3001/admin"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile.production
+      args:
+        PAYLOAD_URL: https://cms.annemiekevertelt.nl
+    container_name: annemieke-web
+    depends_on:
+      - payload
+    networks:
+      - annemieke-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  annemieke-network:
+    driver: bridge
