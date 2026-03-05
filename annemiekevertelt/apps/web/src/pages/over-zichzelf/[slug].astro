@@ -1,0 +1,122 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import PageTurn from '../../components/PageTurn';
+import { fetchBySlug } from '../../lib/payload';
+import { formatDate } from '../../lib/date';
+import { ArrowLeft, Calendar, Heart } from 'lucide-react';
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/over-zichzelf');
+}
+
+const post = await fetchBySlug('about-me', slug).catch(() => null);
+
+if (!post) {
+  return Astro.redirect('/404');
+}
+
+const imageUrl = post.featuredImage 
+  ? `${import.meta.env.PAYLOAD_URL || 'http://localhost:3001'}${post.featuredImage.url}` 
+  : null;
+---
+
+<Layout 
+  title={`${post.title} | Over zichzelf | Annemieke Vertelt`}
+  description={post.excerpt}
+  image={imageUrl}
+>
+  <Navigation />
+
+  <PageTurn client:load>
+    <article class="pt-28 pb-20 min-h-screen">
+      <div class="container-readable">
+        <!-- Back Link -->
+        <a 
+          href="/over-zichzelf" 
+          class="inline-flex items-center gap-2 text-warm-brown hover:text-dark-brown transition-colors mb-8"
+        >
+          <ArrowLeft class="w-4 h-4" />
+          <span class="text-sm">Terug naar over zichzelf</span>
+        </a>
+
+        <!-- Header -->
+        <header class="mb-12">
+          <div class="flex items-center gap-4 text-sm text-text-muted mb-4">
+            <span class="flex items-center gap-1">
+              <Calendar class="w-4 h-4" />
+              <time datetime={post.publishedDate}>
+                {formatDate(post.publishedDate)}
+              </time>
+            </span>
+            <span>·</span>
+            <span class="text-gold font-medium">Over zichzelf</span>
+          </div>
+
+          <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl text-dark-brown mb-6 leading-tight">
+            {post.title}
+          </h1>
+
+          {post.excerpt && (
+            <p class="text-xl text-text-muted italic leading-relaxed">
+              {post.excerpt}
+            </p>
+          )}
+        </header>
+
+        <!-- Featured Image -->
+        {imageUrl && (
+          <figure class="mb-12">
+            <img 
+              src={imageUrl}
+              alt={post.featuredImage.alt || post.title}
+              class="w-full rounded-2xl shadow-lg"
+            />
+            {post.featuredImage.caption && (
+              <figcaption class="text-center text-sm text-text-muted mt-4">
+                {post.featuredImage.caption}
+              </figcaption>
+            )}
+          </figure>
+        )}
+
+        <!-- Content -->
+        <div 
+          class="prose prose-lg prose-warm max-w-none"
+          set:html={post.content}
+        />
+
+        <!-- Quote -->
+        <div class="mt-16 p-8 bg-cream-dark/50 rounded-2xl text-center">
+          <Heart className="w-8 h-8 mx-auto mb-4 text-gold" />
+          <blockquote class="font-serif text-xl text-dark-brown italic">
+            "Iedereen heeft een verhaal dat verteld wil worden."
+          </blockquote>
+          <p class="text-warm-brown mt-4">— Annemieke</p>
+        </div>
+
+        <!-- Navigation to other posts -->
+        <div class="mt-16 pt-8 border-t border-gold/20">
+          <h3 class="font-serif text-xl text-dark-brown mb-6">Meer persoonlijke verhalen</h3>
+          
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a 
+              href="/over-zichzelf" 
+              class="flex-1 p-6 bg-white rounded-xl hover:shadow-lg transition-shadow group"
+            >
+              <span class="text-sm text-gold">← Vorige</span>
+              <p class="font-serif text-lg text-dark-brown mt-1 group-hover:text-warm-brown transition-colors">
+                Alle verhalen bekijken
+              </p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </article>
+  </PageTurn>
+
+  <Footer />
+</Layout>

@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
+import LatestStories from '../components/LatestStories.astro';
 import { Newspaper, BookOpen, Headphones, User } from 'lucide-react';
 
 const categories = [
@@ -119,9 +120,7 @@ const categories = [
   </section>
 
   <!-- Latest Stories Section -->
-  <import LatestStories from '../components/LatestStories.astro'>
-    <LatestStories />
-  </import>
+  <LatestStories />
 
   <!-- Newsletter Section -->
   <section class="py-20 bg-cream-dark/30">
