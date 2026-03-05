@@ -21,5 +21,12 @@
 - Be direct, be honest, be useful, don't be boring
 
 ## Important Notes
-- Memory files got lost/missing - need to be diligent about writing things down
-- Kay expects continuity - this can't happen again
+- Memory files got lost/missing - FIXED: now committed to git
+- Kay expects continuity - using git commits to survive resets
+- RenderOwl is the first major 24/7 project
+- Testing Claude Code ACP vs OpenClaw k2p5 subagents
+
+## Active Projects
+- **RenderOwl** - AI video generation SaaS (Phase 3 in progress)
+  - Stack: Go/Gin, Next.js, PostgreSQL, Asynq, Replicate, Coolify
+  - Status: Phases 1-2 complete, Phase 3 with Claude Code ACP
