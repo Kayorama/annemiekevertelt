@@ -1,0 +1,87 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import StoryCard from '../../components/StoryCard.astro';
+import { fetchPayload } from '../../lib/payload';
+
+const { docs: columns, totalPages } = await fetchPayload({
+  collection: 'columns',
+  limit: 12,
+  where: { draft: { equals: false } },
+}).catch(() => ({ docs: [], totalPages: 0 }));
+---
+
+<Layout 
+  title="Columns | Annemieke Vertelt"
+  description="Gedachten, observaties en reflecties over het leven."
+>
+  <Navigation />
+
+  <main class="pt-32 pb-20">
+    <div class="container-wide">
+      <!-- Header -->
+      <div class="text-center mb-16">
+        <p class="text-warm-brown font-serif italic text-lg mb-2">Annemieke vertelt…</p>
+        <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl text-dark-brown mb-4">…in columns</h1>
+        
+        <div class="flex items-center justify-center gap-4 mb-6">
+          <div class="w-12 h-px bg-gold"></div>
+          <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+          </svg>
+          <div class="w-12 h-px bg-gold"></div>
+        </div>
+        
+        <p class="text-text-muted max-w-lg mx-auto">
+          Gedachten, observaties en reflecties over het leven, de liefde, 
+          en alles wat mij bezighoudt.
+        </p>
+      </div>
+
+      <!-- Content Grid -->
+      {columns.length > 0 ? (
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {columns.map((column: any) => (
+            <StoryCard 
+              href={`/columns/${column.slug}`}
+              title={column.title}
+              excerpt={column.excerpt}
+              image={column.featuredImage}
+      date={column.publishedDate}
+              category="Column"
+            />
+          ))}
+        </div>
+      ) : (
+        <!-- Demo Content -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <StoryCard 
+              href="#"
+              title={`Column ${i}: De kunst van het verdwijnen`}
+    excerpt="Soms is het mooist om even niet gezien te worden. Een reflectie over stilte en de kunst van het wegglijden..."
+              category="Column"
+              demo={true}
+            />
+          ))}
+        </div>
+      )}
+
+      <!-- Pagination -->
+      {totalPages > 1 && (
+        <div class="flex justify-center gap-2 mt-16">
+          <button class="px-4 py-2 rounded-full border border-gold/30 text-warm-brown hover:bg-gold/10 transition-colors disabled:opacity-50" disabled>
+            ← Vorige
+          </button>
+          <span class="px-4 py-2 rounded-full bg-warm-brown text-cream">1</span>
+          <button class="px-4 py-2 rounded-full border border-gold/30 text-warm-brown hover:bg-gold/10 transition-colors">
+            Volgende →
+          </button>
+        </div>
+      )}
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

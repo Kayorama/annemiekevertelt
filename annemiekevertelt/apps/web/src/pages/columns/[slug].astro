@@ -1,0 +1,110 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import PageTurn from '../../components/PageTurn';
+import { fetchBySlug } from '../../lib/payload';
+import { formatDate } from '../../lib/date';
+import { ArrowLeft, Calendar, User } from 'lucide-react';
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/columns');
+}
+
+const column = await fetchBySlug('columns', slug).catch(() => null);
+
+if (!column) {
+  return Astro.redirect('/404');
+}
+
+const imageUrl = column.featuredImage 
+  ? `${import.meta.env.PAYLOAD_URL || 'http://localhost:3001'}${column.featuredImage.url}` 
+  : null;
+---
+
+<Layout 
+  title={`${column.title} | Columns | Annemieke Vertelt`}
+  description={column.excerpt}
+  image={imageUrl}
+>
+  <Navigation />
+
+  <!-- Page Turn Wrapper -->
+  <PageTurn client:load>
+    <article class="pt-28 pb-20 min-h-screen">
+      <div class="container-readable">
+        <!-- Back Link -->
+        <a 
+          href="/columns" 
+          class="inline-flex items-center gap-2 text-warm-brown hover:text-dark-brown transition-colors mb-8"
+        >
+          <ArrowLeft class="w-4 h-4" />
+          <span class="text-sm">Terug naar columns</span>
+        </a>
+
+        <!-- Header -->
+        <header class="mb-12">
+          <div class="flex items-center gap-4 text-sm text-text-muted mb-4">
+            <span class="flex items-center gap-1">
+              <Calendar class="w-4 h-4" />
+              <time datetime={column.publishedDate}>
+                {formatDate(column.publishedDate)}
+              </time>
+            </span>
+            <span>·</span>
+            <span class="text-gold font-medium">Column</span>
+          </div>
+
+          <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl text-dark-brown mb-6 leading-tight">
+            {column.title}
+          </h1>
+
+          {column.excerpt && (
+            <p class="text-xl text-text-muted italic leading-relaxed">
+              {column.excerpt}
+            </p>
+          )}
+        </header>
+
+        <!-- Featured Image -->
+        {imageUrl && (
+          <figure class="mb-12">
+            <img 
+              src={imageUrl}
+              alt={column.featuredImage.alt || column.title}
+              class="w-full rounded-2xl shadow-lg"
+            />
+            {column.featuredImage.caption && (
+              <figcaption class="text-center text-sm text-text-muted mt-4">
+                {column.featuredImage.caption}
+              </figcaption>
+            )}
+          </figure>
+        )}
+
+        <!-- Content -->
+        <div 
+          class="prose prose-lg prose-warm max-w-none"
+          set:html={column.content}
+        />
+
+        <!-- Author -->
+        <div class="mt-16 pt-8 border-t border-gold/20">
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gold to-warm-brown flex items-center justify-center text-cream font-serif text-xl">
+              A
+            </div>
+            <div>
+              <p class="font-medium text-dark-brown">Annemieke</p>
+              <p class="text-sm text-text-muted">Columnist & Verhalenverteller</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </PageTurn>
+
+  <Footer />
+</Layout>

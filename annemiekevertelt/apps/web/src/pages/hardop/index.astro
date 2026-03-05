@@ -1,0 +1,150 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import { fetchPayload } from '../../lib/payload';
+
+const { docs: audioContent } = await fetchPayload({
+  collection: 'audio-content',
+  limit: 12,
+  where: { draft: { equals: false } },
+}).catch(() => ({ docs: [] }));
+
+const demoAudio = [
+  { title: 'Een avond in de herfst', duration: '12 min', desc: 'Een sfeervol verhaal over de laatste warme dag van het jaar...' },
+  { title: 'De brief die nooit kwam', duration: '18 min', desc: 'Soms wachten we op iets dat nooit arriveert. Een verhaal over loslaten...' },
+  { title: 'Oma\'s geheime recept', duration: '8 min', desc: 'Het recept voor de perfecte appeltaart, maar vooral voor liefde...' },
+  { title: 'Het laatste station', duration: '25 min', desc: 'Een treinreis die leidt naar onverwachte ontmoetingen...' },
+  { title: 'Vogels in de winter', duration: '15 min', desc: 'Waarom sommige vogels blijven wanneer de kou toeslaat...' },
+];
+---
+
+<Layout 
+  title="Hardop | Annemieke Vertelt"
+  description="Voorleesverhalen om naar te luisteren."
+>
+  <Navigation />
+
+  <main class="pt-32 pb-20">
+    <div class="container-wide">
+      <!-- Header -->
+      <div class="text-center mb-16">
+        <p class="text-warm-brown font-serif italic text-lg mb-2">Annemieke vertelt…</p>
+        
+        <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl text-dark-brown mb-4">…hardop</h1>
+        
+        <div class="flex items-center justify-center gap-4 mb-6">
+          <div class="w-12 h-px bg-gold"></div>
+          <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/>
+          </svg>
+          <div class="w-12 h-px bg-gold"></div>
+        </div>
+        
+        <p class="text-text-muted max-w-lg mx-auto">
+          Verhalen voorgelezen door Annemieke. 
+          Sluit je ogen en laat je meevoeren.
+        </p>
+      </div>
+
+      <!-- Featured Audio Player -->
+      <div class="max-w-3xl mx-auto mb-20">
+        <div class="bg-white rounded-3xl p-8 shadow-xl">
+          <div class="flex items-start gap-6">
+            <!-- Cover Image -->
+            <div class="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl bg-gradient-to-br from-warm-brown to-gold flex items-center justify-center shrink-0">
+              <svg class="w-16 h-16 text-cream" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+              </svg>
+            </div>
+
+            <!-- Info -->
+            <div class="flex-1">
+              <span class="text-xs font-medium tracking-wider uppercase text-gold">Nu spelend</span>
+              <h2 class="font-serif text-2xl sm:text-3xl text-dark-brown mt-1 mb-2">Een avond in de herfst</h2>
+              <p class="text-text-muted text-sm mb-6">Een sfeervol verhaal over de laatste warme dag van het jaar...</p>
+
+              <!-- Progress -->
+              <div class="space-y-3">
+                <div class="flex items-center justify-between text-xs text-text-muted">
+                  <span>4:32</span>
+                  <span>12:00</span>
+                </div>
+                <div class="h-1.5 bg-cream-dark rounded-full overflow-hidden">
+                  <div class="h-full w-[38%] bg-warm-brown rounded-full"></div>
+                </div>
+              </div>
+
+              <!-- Controls -->
+              <div class="flex items-center justify-center gap-6 mt-6">
+                <button class="p-2 text-warm-brown hover:text-dark-brown transition-colors">
+                  <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+                  </svg>
+                </button>
+
+                <button class="w-16 h-16 rounded-full bg-warm-brown text-cream flex items-center justify-center hover:bg-dark-brown transition-colors shadow-lg">
+                  <svg class="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                  </svg>
+                </button>
+
+                <button class="p-2 text-warm-brown hover:text-dark-brown transition-colors">
+                  <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Audio List -->
+      <div class="max-w-3xl mx-auto">
+        <h3 class="font-serif text-2xl text-dark-brown mb-6">Meer verhalen</h3>
+
+        <div class="space-y-4">
+          {(audioContent.length > 0 ? audioContent : demoAudio).map((item: any, index: number) => (
+            <a 
+              href={item.slug ? `/hardop/${item.slug}` : '#'}
+              class="group flex items-center gap-4 p-4 bg-white rounded-xl hover:shadow-lg transition-all duration-300"
+            >
+              <!-- Play button -->
+              <div class="w-12 h-12 rounded-full bg-cream-dark flex items-center justify-center group-hover:bg-warm-brown transition-colors"
+              >
+                <svg class="w-5 h-5 text-warm-brown group-hover:text-cream transition-colors ml-0.5" fill="currentColor" viewBox="0 0 24 24"
+                >
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+              </div>
+
+              <!-- Info -->
+              <div class="flex-1 min-w-0">
+                <h4 class="font-serif text-lg text-dark-brown group-hover:text-warm-brown transition-colors truncate"
+                >
+                  {item.title}
+                </h4>
+                <p class="text-text-muted text-sm truncate">
+                  {item.description || item.desc}
+                </p>
+              </div>
+
+              <!-- Duration -->
+              <span class="text-sm text-gold font-medium">
+                {item.duration}
+              </span>
+
+              <!-- Arrow -->
+              <svg class="w-5 h-5 text-gold opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

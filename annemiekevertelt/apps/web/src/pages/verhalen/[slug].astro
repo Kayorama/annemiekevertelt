@@ -1,0 +1,123 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import PageTurn from '../../components/PageTurn';
+import { fetchBySlug } from '../../lib/payload';
+import { formatDate } from '../../lib/date';
+import { ArrowLeft, Calendar, Clock, Star } from 'lucide-react';
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/verhalen');
+}
+
+const story = await fetchBySlug('childrens-stories', slug).catch(() => null);
+
+if (!story) {
+  return Astro.redirect('/404');
+}
+
+const imageUrl = story.featuredImage 
+  ? `${import.meta.env.PAYLOAD_URL || 'http://localhost:3001'}${story.featuredImage.url}` 
+  : null;
+---
+
+<Layout 
+  title={`${story.title} | Verhalen voor kinderen | Annemieke Vertelt`}
+  description={story.excerpt}
+  image={imageUrl}
+>
+  <Navigation />
+
+  <PageTurn client:load>
+    <article class="pt-28 pb-20 min-h-screen">
+      <div class="container-readable">
+        <!-- Back Link -->
+        <a 
+          href="/verhalen" 
+          class="inline-flex items-center gap-2 text-warm-brown hover:text-dark-brown transition-colors mb-8"
+        >
+          <ArrowLeft class="w-4 h-4" />
+          <span class="text-sm">Terug naar verhalen</span>
+        </a>
+
+        <!-- Header -->
+        <header class="mb-12">
+          <div class="flex flex-wrap items-center gap-4 text-sm text-text-muted mb-4">
+            <span class="flex items-center gap-1">
+              <Calendar class="w-4 h-4" />
+              <time datetime={story.publishedDate}>
+                {formatDate(story.publishedDate)}
+              </time>
+            </span>
+            <span>·</span>
+            <span class="text-gold font-medium">Verhaal</span>
+            <span>·</span>
+            <span class="flex items-center gap-1">
+              <Star class="w-4 h-4 text-gold" />
+              {story.ageGroup}
+            </span>
+            {story.readingTime && (
+              <>
+                <span>·</span>
+                <span class="flex items-center gap-1">
+                  <Clock class="w-4 h-4" />
+                  {story.readingTime} min
+                </span>
+              </>
+            )}
+          </div>
+
+          <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl text-dark-brown mb-6 leading-tight">
+            {story.title}
+          </h1>
+
+          {story.excerpt && (
+            <p class="text-xl text-text-muted italic leading-relaxed">
+              {story.excerpt}
+            </p>
+          )}
+        </header>
+
+        <!-- Featured Image -->
+        {imageUrl && (
+          <figure class="mb-12">
+            <img 
+              src={imageUrl}
+              alt={story.featuredImage.alt || story.title}
+              class="w-full rounded-2xl shadow-lg"
+            />
+            {story.featuredImage.caption && (
+              <figcaption class="text-center text-sm text-text-muted mt-4">
+                {story.featuredImage.caption}
+              </figcaption>
+            )}
+          </figure>
+        )}
+
+        <!-- Content -->
+        <div 
+          class="prose prose-lg prose-warm max-w-none"
+          set:html={story.content}
+        />
+
+        <!-- The End -->
+        <div class="mt-16 text-center">
+          <div class="flex items-center justify-center gap-4 mb-4">
+            <div class="w-12 h-px bg-gold"></div>
+            <span class="font-serif text-gold italic">~ Einde ~</span>
+            <div class="w-12 h-px bg-gold"></div>
+          </div>
+          
+          <p class="text-text-muted text-sm">
+            Bedankt voor het lezen! 🌟
+          </p>
+        </div>
+      </div>
+    </article>
+  </PageTurn>
+
+  <Footer />
+</Layout>

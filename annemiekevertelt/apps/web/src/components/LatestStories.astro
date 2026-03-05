@@ -1,10 +1,10 @@
 ---
 import { fetchPayload } from '../lib/payload';
 
-const columnsData = await fetchPayload({ collection: 'columns', limit: 3, where: { status: { equals: 'published' } } }).catch(() => ({ docs: [] }));
-const storiesData = await fetchPayload({ collection: 'childrens-stories', limit: 3, where: { status: { equals: 'published' } } }).catch(() => ({ docs: [] }));
-const audioData = await fetchPayload({ collection: 'audio-content', limit: 3, where: { status: { equals: 'published' } } }).catch(() => ({ docs: [] }));
-const aboutData = await fetchPayload({ collection: 'about-me', limit: 3, where: { status: { equals: 'published' } } }).catch(() => ({ docs: [] }));
+const columnsData = await fetchPayload({ collection: 'columns', limit: 3, where: { draft: { equals: false } } }).catch(() => ({ docs: [] }));
+const storiesData = await fetchPayload({ collection: 'childrens-stories', limit: 3, where: { draft: { equals: false } } }).catch(() => ({ docs: [] }));
+const audioData = await fetchPayload({ collection: 'audio-content', limit: 3, where: { draft: { equals: false } } }).catch(() => ({ docs: [] }));
+const aboutData = await fetchPayload({ collection: 'about-me', limit: 3, where: { draft: { equals: false } } }).catch(() => ({ docs: [] }));
 
 const hasContent = columnsData.docs.length > 0 || storiesData.docs.length > 0 || audioData.docs.length > 0 || aboutData.docs.length > 0;
 ---

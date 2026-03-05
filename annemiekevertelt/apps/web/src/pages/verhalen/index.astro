@@ -1,0 +1,104 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import StoryCard from '../../components/StoryCard.astro';
+import { fetchPayload } from '../../lib/payload';
+
+const { docs: stories, totalPages } = await fetchPayload({
+  collection: 'childrens-stories',
+  limit: 12,
+  where: { draft: { equals: false } },
+}).catch(() => ({ docs: [], totalPages: 0 }));
+
+const ageGroups = ['Alle', '4-6 jaar', '6-8 jaar', '8-10 jaar', '10+ jaar'];
+---
+
+<Layout 
+  title="Verhalen voor kinderen | Annemieke Vertelt"
+  description="Magische verhalen voor kinderen."
+>
+  <Navigation />
+
+  <main class="pt-32 pb-20">
+    <div class="container-wide">
+      <!-- Header -->
+      <div class="text-center mb-12">
+        <p class="text-warm-brown font-serif italic text-lg mb-2">Annemieke vertelt…</p>
+        
+        <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl text-dark-brown mb-4">
+          …verhalen voor kinderen
+        </h1>
+        
+        <div class="flex items-center justify-center gap-4 mb-6">
+          <div class="w-12 h-px bg-gold"></div>
+          <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+          </svg>
+          <div class="w-12 h-px bg-gold"></div>
+        </div>
+        
+        <p class="text-text-muted max-w-lg mx-auto">
+          Magische verhalen die kinderen meenemen op avontuur. 
+          Voor het slapengaan, of gewoon omdat het mag.
+        </p>
+      </div>
+
+      <!-- Age Filter -->
+      <div class="flex flex-wrap justify-center gap-2 mb-12">
+        {ageGroups.map((age, index) => (
+          <button 
+            class:list={[
+              'px-4 py-2 rounded-full text-sm transition-colors',
+              index === 0 
+                ? 'bg-warm-brown text-cream' 
+                : 'bg-white border border-gold/30 text-dark-brown hover:bg-gold/10'
+            ]}
+          >
+            {age}
+          </button>
+        ))}
+      </div>
+
+      <!-- Content Grid -->
+      {stories.length > 0 ? (
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {stories.map((story: any) => (
+            <StoryCard 
+              href={`/verhalen/${story.slug}`}
+              title={story.title}
+              excerpt={story.excerpt}
+              image={story.featuredImage}
+              date={story.publishedDate}
+              category="Verhaal"
+              ageGroup={story.ageGroup}
+            />
+          ))}
+        </div>
+      ) : (
+        <!-- Demo Content -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[
+            { title: 'De wolkendief', age: '6-8 jaar', desc: 'Een meisje ontdekt dat ze wolken kan vangen en er dromen van kan maken...' },
+            { title: 'Kikker vindt een vriend', age: '4-6 jaar', desc: 'Kikker was zo alleen tot hij op een dag een heel bijzonder iemand ontmoette...' },
+            { title: 'Het huis dat verdwaalde', age: '8-10 jaar', desc: 'Soms lopen huizen ook gewoon weg. Dit is het verhaal van een huis dat op reis ging...' },
+            { title: 'De laatste draak', age: '10+ jaar', desc: 'In een wereld waar draakjes uitgestorven leken, leefde er nog één...' },
+            { title: 'De maan die wilde dansen', age: '4-6 jaar', desc: 'De maan keek elke nacht naar de mensen die dansten op aarde...' },
+            { title: 'Het geheim van het oude bos', age: '8-10 jaar', desc: 'Achter oma\'s huis lag een bos waar nog oude magie leefde...' },
+          ].map((story) => (
+            <StoryCard 
+              href="#"
+              title={story.title}
+              excerpt={story.desc}
+              category="Verhaal"
+              ageGroup={story.age}
+              demo={true}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
