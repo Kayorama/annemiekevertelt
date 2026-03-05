@@ -1,0 +1,139 @@
+---
+import { Menu, X, Newspaper, BookOpen, Headphones, User } from 'lucide-react';
+
+interface Props {
+  transparent?: boolean;
+}
+
+const { transparent = false } = Astro.props;
+
+const navItems = [
+  { href: '/columns', label: '…in columns', icon: Newspaper },
+  { href: '/verhalen', label: '…verhalen voor kinderen', icon: BookOpen },
+  { href: '/hardop', label: '…hardop', icon: Headphones },
+  { href: '/over-zichzelf', label: '…over zichzelf', icon: User },
+];
+---
+
+<header class:list={[
+  'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
+  transparent ? 'bg-transparent' : 'bg-cream/95 backdrop-blur-md shadow-sm'
+]}>
+  <div class="container-wide">
+    <nav class="flex items-center justify-between h-20">
+      <!-- Hamburger Menu Button -->
+      <button 
+        id="menu-toggle"
+        class="p-2 -ml-2 rounded-lg hover:bg-warm-brown/10 transition-colors"
+        aria-label="Menu"
+        aria-expanded="false"
+      >
+        <Menu class="w-6 h-6 text-dark-brown" />
+      </button>
+
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-3">
+        <svg class="w-8 h-8" viewBox="0 0 32 32" fill="none">
+          <rect width="32" height="32" rx="8" fill="#C4A77D"/>
+          <path d="M8 12C8 10.8954 8.89543 10 10 10H22C23.1046 10 24 10.8954 24 12V24C24 25.1046 23.1046 26 22 26H10C8.89543 26 8 25.1046 8 24V12Z" fill="#FDF6E9"/>
+          <path d="M10 6C10 4.89543 10.8954 4 12 4H20C21.1046 4 22 4.89543 22 6V10H10V6Z" fill="#8B7355"/>
+          <line x1="11" y1="14" x2="21" y2="14" stroke="#C4A77D" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="11" y1="18" x2="19" y2="18" stroke="#C4A77D" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span class="font-serif text-xl text-dark-brown hidden sm:block">Annemieke</span>
+      </a>
+
+      <!-- Spacer for balance -->
+      <div class="w-10"></div>
+    </nav>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div 
+    id="mobile-menu" 
+    class="fixed inset-0 bg-cream z-40 transform -translate-x-full transition-transform duration-500 ease-in-out"
+    aria-hidden="true"
+  >
+    <div class="container-wide pt-20 pb-8 h-full flex flex-col">
+      <!-- Close Button -->
+      <button 
+        id="menu-close"
+        class="absolute top-6 left-4 p-2 rounded-lg hover:bg-warm-brown/10 transition-colors"
+        aria-label="Sluit menu"
+      >
+        <X class="w-6 h-6 text-dark-brown" />
+      </button>
+
+      <!-- Menu Content -->
+      <div class="flex-1 flex flex-col justify-center">
+        <p class="text-warm-brown font-serif italic text-lg mb-8 text-center">Annemieke vertelt…</p>
+        
+        <nav class="space-y-2">
+          {navItems.map((item) => (
+            <a 
+              href={item.href}
+              class="menu-item group flex items-center gap-4 p-4 rounded-xl hover:bg-cream-dark transition-all duration-300"
+            >
+              <div class="w-12 h-12 rounded-full bg-cream-dark border-2 border-gold flex items-center justify-center group-hover:bg-warm-brown group-hover:border-warm-brown transition-colors">
+                <item.icon class="w-5 h-5 text-warm-brown group-hover:text-cream transition-colors" />
+              </div>
+              <span class="font-serif text-2xl text-dark-brown group-hover:text-warm-brown transition-colors">
+                {item.label}
+              </span>
+            </a>
+          ))}
+        </nav>
+      </div>
+
+      <!-- Bottom Quote -->
+      <p class="text-text-muted text-center text-sm italic">
+        "Mocht je me gemist hebben…"
+      </p>
+    </div>
+  </div>
+
+  <!-- Backdrop -->
+  <div 
+    id="menu-backdrop" 
+    class="fixed inset-0 bg-dark-brown/20 backdrop-blur-sm z-30 opacity-0 pointer-events-none transition-opacity duration-300"
+  ></div>
+</header>
+
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const menuClose = document.getElementById('menu-close');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const menuBackdrop = document.getElementById('menu-backdrop');
+
+  function openMenu() {
+    mobileMenu?.classList.remove('-translate-x-full');
+    menuBackdrop?.classList.remove('opacity-0', 'pointer-events-none');
+    menuToggle?.setAttribute('aria-expanded', 'true');
+    mobileMenu?.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    mobileMenu?.classList.add('-translate-x-full');
+    menuBackdrop?.classList.add('opacity-0', 'pointer-events-none');
+    menuToggle?.setAttribute('aria-expanded', 'false');
+    mobileMenu?.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  menuToggle?.addEventListener('click', openMenu);
+  menuClose?.addEventListener('click', closeMenu);
+  menuBackdrop?.addEventListener('click', closeMenu);
+
+  // Close menu on escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mobileMenu?.getAttribute('aria-hidden') === 'false') {
+      closeMenu();
+    }
+  });
+
+  // Close menu when clicking a link
+  mobileMenu?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+</script>
