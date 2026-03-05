@@ -1,43 +1,42 @@
 # RenderOwl 24/7 Build Monitor
 
 ## Current Status
-**Last updated:** 2026-03-05 12:54 CET by Slothy
-**Phase:** 3 - Integration & Polish (Active)
-**Agent Type:** OpenClaw k2p5 subagents (Claude ACP auth failed)
+**Last updated:** 2026-03-05 13:01 CET by Slothy
+**Active Projects:** 2 (RenderOwl + Annemieke Vertelt)
 
-## Phase 1 & 2 Complete ✅
-All 8 subagents finished (OpenClaw k2p5):
+## Project 1: RenderOwl
+**Phase:** 3 - Integration & Polish
+**Agent Type:** OpenClaw k2p5 subagents
 
-**Phase 1:**
-- ✅ Backend: Replicate API, hardened workers
-- ✅ Frontend: Timeline drag-drop, templates
-- ✅ DevOps: Docker prod, Coolify, CI/CD
-- ✅ Pipeline: Asynq workers, video render flow
-
-**Phase 2:**
-- ✅ Backend: Clerk auth, credit system, rate limiting, webhooks
-- ✅ Frontend: Export flow (SSE), auth UI, undo/redo, auto-save
-- ✅ Integration: YouTube/TikTok OAuth, R2 storage, Sentry
-- ✅ QA: 47+ tests passing, TypeScript clean
-
-## Phase 3: Integration & Polish (IN PROGRESS)
-
-### Active Subagents (k2p5)
+### Phase 3 Active Subagents
 | Subagent | Task | Status |
 |----------|------|--------|
-| phase3-backend | Stripe payments, API polish | 🔄 Starting |
-| phase3-frontend | UX polish, performance | 🔄 Starting |
-| phase3-deploy | Coolify production deploy | 🔄 Starting |
-| phase3-e2e | E2E testing, bug fixes | 🔄 Starting |
+| phase3-backend | Stripe payments, API polish | 🔄 Running |
+| phase3-frontend | UX polish, performance | 🔄 Running |
+| phase3-deploy | Coolify production deploy | 🔄 Running |
+| phase3-e2e | E2E testing, bug fixes | 🔄 Running |
 
-### Phase 3 Goals
-- [ ] Stripe payments live (webhooks, credit purchase)
-- [ ] Production deployment on Coolify
-- [ ] E2E video pipeline working end-to-end
-- [ ] Performance optimization
-- [ ] Final bug fixes and polish
+## Project 2: Annemieke Vertelt 🆕
+**Status:** Starting - Full implementation needed
+**Agent Type:** OpenClaw k2p5 subagents
+
+### Active Subagents
+| Subagent | Task | Status |
+|----------|------|--------|
+| annemieke-frontend | Astro frontend, homepage, sections | 🔄 Starting |
+| annemieke-cms | PayloadCMS collections, admin UX | 🔄 Starting |
+| annemieke-design | Page-turn animations, styling | 🔄 Starting |
+| annemieke-email | Mailing list, newsletter system | 🔄 Starting |
+
+### Goals
+- [ ] Homepage with 4 category icons
+- [ ] Page-turn animations for reading
+- [ ] Audio player for "hardop" section
+- [ ] Simple admin panel
+- [ ] Newsletter subscription & sending
+- [ ] Coolify deployment
 
 ## Notes
-- Claude Code ACP auth failed - using k2p5 subagents
-- k2p5 proven successful in Phases 1-2
-- 24/7 continuous operation maintained
+- Two concurrent 24/7 projects
+- Using proven k2p5 subagent pattern
+- Priority: Both need to ship
