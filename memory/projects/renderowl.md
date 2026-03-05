@@ -39,3 +39,8 @@ None
 
 ## Related
 - Daily Log: memory/2026-03-05.md
+
+## Notes
+- Persistent memory skill created and tested successfully
+- All memory now captured immediately, never lost to resets
+- Git commits ensure durability
