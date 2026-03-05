@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@astrojs/react": "^4.0.0",
-    "@astrojs/sitemap": "^7.0.0",
-    "@astrojs/tailwind": "^5.1.0",
+    "@astrojs/sitemap": "^3.2.0",
+    "@astrojs/tailwind": "^6.0.0",
     "@astrojs/vercel": "^8.0.0",
     "astro": "^5.0.0",
     "framer-motion": "^11.0.0",

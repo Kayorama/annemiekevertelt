@@ -4,17 +4,24 @@ import Navigation from '../../components/Navigation.astro';
 import Footer from '../../components/Footer.astro';
 import PageTurn from '../../components/PageTurn';
 import AudioPlayer from '../../components/AudioPlayer';
-import { fetchBySlug } from '../../lib/payload';
+import { fetchPayload, fetchBySlug } from '../../lib/payload';
 import { formatDate } from '../../lib/date';
 import { ArrowLeft, Calendar, Clock, Headphones } from 'lucide-react';
 
-const { slug } = Astro.params;
+export async function getStaticPaths() {
+  const { docs: audioItems } = await fetchPayload({
+    collection: 'audio-content',
+    limit: 100,
+    where: { status: { equals: 'published' } },
+  }).catch(() => ({ docs: [] }));
 
-if (!slug) {
-  return Astro.redirect('/hardop');
+  return audioItems.map((item: any) => ({
+    params: { slug: item.slug },
+  }));
 }
 
-const audio = await fetchBySlug('audio-content', slug).catch(() => null);
+const { slug } = Astro.params;
+const audio = await fetchBySlug('audio-content', slug!).catch(() => null);
 
 if (!audio) {
   return Astro.redirect('/404');

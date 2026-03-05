@@ -3,17 +3,24 @@ import Layout from '../../layouts/Layout.astro';
 import Navigation from '../../components/Navigation.astro';
 import Footer from '../../components/Footer.astro';
 import PageTurn from '../../components/PageTurn';
-import { fetchBySlug } from '../../lib/payload';
+import { fetchPayload, fetchBySlug } from '../../lib/payload';
 import { formatDate } from '../../lib/date';
 import { ArrowLeft, Calendar, User } from 'lucide-react';
 
-const { slug } = Astro.params;
+export async function getStaticPaths() {
+  const { docs: columns } = await fetchPayload({
+    collection: 'columns',
+    limit: 100,
+    where: { status: { equals: 'published' } },
+  }).catch(() => ({ docs: [] }));
 
-if (!slug) {
-  return Astro.redirect('/columns');
+  return columns.map((column: any) => ({
+    params: { slug: column.slug },
+  }));
 }
 
-const column = await fetchBySlug('columns', slug).catch(() => null);
+const { slug } = Astro.params;
+const column = await fetchBySlug('columns', slug!).catch(() => null);
 
 if (!column) {
   return Astro.redirect('/404');

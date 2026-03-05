@@ -86,7 +86,7 @@ export default function AudioPlayer({ title, audioUrl, coverImage, duration }: A
       <audio ref={audioRef} src={audioUrl || undefined} preload="metadata" />
 
       <div className="flex flex-col sm:flex-row items-center gap-6">
-        <!-- Cover Image -->
+        {/* Cover Image */}
         <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 bg-gradient-to-br from-warm-brown to-gold flex items-center justify-center"
           style={{
             background: coverImage ? undefined : 'linear-gradient(135deg, #8B7355 0%, #C4A77D 100%)'
@@ -105,7 +105,7 @@ export default function AudioPlayer({ title, audioUrl, coverImage, duration }: A
           )}
         </div>
 
-        <!-- Controls -->
+        {/* Controls */}
         <div className="flex-1 w-full">
           <h3 className="font-serif text-xl text-dark-brown mb-1 truncate text-center sm:text-left">{title}</h3>
           
@@ -113,7 +113,7 @@ export default function AudioPlayer({ title, audioUrl, coverImage, duration }: A
             <p className="text-sm text-text-muted mb-4 text-center sm:text-left">Duur: {duration}</p>
           )}
 
-          <!-- Progress Bar -->
+          {/* Progress Bar */}
           <div className="space-y-2 mb-4">
             <input
               type="range"
@@ -132,7 +132,7 @@ export default function AudioPlayer({ title, audioUrl, coverImage, duration }: A
             </div>
           </div>
 
-          <!-- Control Buttons -->
+          {/* Control Buttons */}
           <div className="flex items-center justify-center sm:justify-start gap-4">
             <button 
               onClick={() => {
@@ -171,7 +171,7 @@ export default function AudioPlayer({ title, audioUrl, coverImage, duration }: A
               <SkipForward className="w-5 h-5" />
             </button>
 
-            <!-- Volume -->
+            {/* Volume */}
             <div className="flex items-center gap-2 ml-4">
               <button 
                 onClick={toggleMute}
