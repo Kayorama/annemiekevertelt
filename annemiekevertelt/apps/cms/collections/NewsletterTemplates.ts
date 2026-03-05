@@ -8,9 +8,14 @@ export const NewsletterTemplates: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'subject', 'status', 'createdAt'],
+    defaultColumns: ['name', 'subject', 'status', 'sentAt'],
     group: '💌 Nieuwsbrief',
     description: 'Maak en verstuur nieuwsbrieven naar je abonnees',
+    components: {
+      edit: {
+        BeforeDocument: './components/admin/NewsletterActions#NewsletterActions',
+      },
+    },
   },
   access: {
     create: ({ req: { user } }) => !!user,
@@ -97,6 +102,10 @@ export const NewsletterTemplates: CollectionConfig = {
       admin: {
         readOnly: true,
         position: 'sidebar',
+        date: {
+          pickerAppearance: 'dayAndTime',
+          displayFormat: 'd MMMM yyyy, HH:mm',
+        },
         description: 'Automatisch ingevuld',
       },
     },
