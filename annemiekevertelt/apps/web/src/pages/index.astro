@@ -169,6 +169,7 @@ const categories = [
 <script>
   const form = document.getElementById('newsletter-form');
   const message = document.getElementById('newsletter-message');
+  const API_URL = import.meta.env.PAYLOAD_URL || 'http://localhost:3001';
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -177,7 +178,7 @@ const categories = [
     const name = formData.get('name');
 
     try {
-      const response = await fetch('/api/subscribe', {
+      const response = await fetch(`${API_URL}/api/subscribe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, name }),

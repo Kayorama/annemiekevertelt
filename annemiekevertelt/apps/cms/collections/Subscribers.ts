@@ -12,6 +12,9 @@ export const Subscribers: CollectionConfig = {
     group: '💌 Nieuwsbrief',
     description: 'Mensen die zich hebben aangemeld voor de nieuwsbrief',
     hideAPIURL: true,
+    components: {
+      beforeList: ['./components/admin/SubscriberStats#SubscriberStats'],
+    },
   },
   access: {
     create: ({ req: { user } }) => !!user,

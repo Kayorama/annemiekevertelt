@@ -66,6 +66,7 @@
 <script>
   const form = document.getElementById('footer-newsletter-form');
   const message = document.getElementById('footer-newsletter-message');
+  const API_URL = import.meta.env.PAYLOAD_URL || 'http://localhost:3001';
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -73,7 +74,7 @@
     const email = formData.get('email');
 
     try {
-      const response = await fetch('/api/subscribe', {
+      const response = await fetch(`${API_URL}/api/subscribe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
