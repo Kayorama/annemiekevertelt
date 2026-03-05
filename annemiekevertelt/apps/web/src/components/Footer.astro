@@ -1,0 +1,98 @@
+---
+---
+
+<footer class="bg-dark-brown text-cream py-16 mt-20">
+  <div class="container-wide">
+    <div class="grid md:grid-cols-3 gap-12">
+      <!-- Brand -->
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <svg class="w-8 h-8" viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="8" fill="#C4A77D"/>
+            <path d="M8 12C8 10.8954 8.89543 10 10 10H22C23.1046 10 24 10.8954 24 12V24C24 25.1046 23.1046 26 22 26H10C8.89543 26 8 25.1046 8 24V12Z" fill="#FDF6E9"/>
+            <path d="M10 6C10 4.89543 10.8954 4 12 4H20C21.1046 4 22 4.89543 22 6V10H10V6Z" fill="#8B7355"/>
+            <line x1="11" y1="14" x2="21" y2="14" stroke="#C4A77D" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="11" y1="18" x2="19" y2="18" stroke="#C4A77D" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span class="font-serif text-xl">Annemieke Vertelt</span>
+        </div>
+        <p class="text-cream/70 text-sm leading-relaxed">
+          Een warme, persoonlijke plek vol verhalen, columns en persoonlijke verhalen. 
+          Want iedereen heeft een verhaal dat verteld wil worden.
+        </p>
+      </div>
+
+      <!-- Links -->
+      <div>
+        <h4 class="font-serif text-lg mb-4">Ontdek</h4>
+        <ul class="space-y-2">
+          <li><a href="/columns" class="text-cream/70 hover:text-cream transition-colors">Columns</a></li>
+          <li><a href="/verhalen" class="text-cream/70 hover:text-cream transition-colors">Verhalen voor kinderen</a></li>
+          <li><a href="/hardop" class="text-cream/70 hover:text-cream transition-colors">Hardop (luisteren)</a></li>
+          <li><a href="/over-zichzelf" class="text-cream/70 hover:text-cream transition-colors">Over zichzelf</a></li>
+        </ul>
+      </div>
+
+      <!-- Newsletter -->
+      <div>
+        <h4 class="font-serif text-lg mb-4">Blijf op de hoogte</h4>
+        <p class="text-cream/70 text-sm mb-4">Ontvang een berichtje als er een nieuw verhaal is.</p>
+        <form id="footer-newsletter-form" class="flex gap-2">
+          <input 
+            type="email" 
+            name="email"
+            placeholder="je@email.nl" 
+            required
+            class="flex-1 px-4 py-2 rounded-full bg-cream/10 border border-cream/20 text-cream placeholder:text-cream/40 focus:outline-none focus:border-gold"
+          />
+          <button type="submit" class="px-6 py-2 rounded-full bg-gold text-dark-brown font-medium hover:bg-gold-light transition-colors">
+            Inschrijven
+          </button>
+        </form>
+        <p id="footer-newsletter-message" class="text-sm mt-2 hidden"></p>
+      </div>
+    </div>
+
+    <div class="border-t border-cream/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-cream/50 text-sm">© {new Date().getFullYear()} Annemieke Vertelt. Alle rechten voorbehouden.</p>
+      <div class="flex gap-6">
+        <a href="/privacy" class="text-cream/50 hover:text-cream text-sm transition-colors">Privacy</a>
+        <a href="/contact" class="text-cream/50 hover:text-cream text-sm transition-colors">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const form = document.getElementById('footer-newsletter-form');
+  const message = document.getElementById('footer-newsletter-message');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const email = formData.get('email');
+
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        message.textContent = '✓ ' + data.message;
+        message.className = 'text-sm mt-2 text-green-400';
+        form.reset();
+      } else {
+        message.textContent = data.error || 'Er ging iets mis';
+        message.className = 'text-sm mt-2 text-red-400';
+      }
+    } catch {
+      message.textContent = 'Er ging iets mis. Probeer het later opnieuw.';
+      message.className = 'text-sm mt-2 text-red-400';
+    }
+    message.classList.remove('hidden');
+  });
+</script>

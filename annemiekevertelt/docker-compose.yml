@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: annemieke-postgres
+    environment:
+      POSTGRES_USER: annemieke
+      POSTGRES_PASSWORD: annemieke_dev_password
+      POSTGRES_DB: annemieke_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U annemieke -d annemieke_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  payload:
+    build:
+      context: .
+      dockerfile: apps/cms/Dockerfile
+    container_name: annemieke-cms
+    ports:
+      - "3001:3001"
+    environment:
+      DATABASE_URI: postgresql://annemieke:annemieke_dev_password@postgres:5432/annemieke_db
+      PAYLOAD_SECRET: dev-secret-change-in-production
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+    volumes:
+      - ./apps/cms/src:/app/apps/cms/src
+      - ./apps/cms/media:/app/apps/cms/media
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: sh -c "pnpm migrate && pnpm dev"
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile.dev
+    container_name: annemieke-web
+    ports:
+      - "4321:4321"
+    environment:
+      PAYLOAD_URL: http://payload:3001
+    volumes:
+      - ./apps/web/src:/app/apps/web/src
+      - ./apps/web/public:/app/apps/web/public
+    depends_on:
+      - payload
+    command: pnpm dev
+
+volumes:
+  postgres_data:

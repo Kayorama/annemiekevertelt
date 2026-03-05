@@ -1,0 +1,21 @@
+{
+  "name": "annemiekevertelt",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev:web": "cd apps/web && pnpm dev",
+    "dev:cms": "cd apps/cms && pnpm dev",
+    "build": "pnpm -r build",
+    "build:web": "cd apps/web && pnpm build",
+    "build:cms": "cd apps/cms && pnpm build",
+    "start": "docker-compose up -d",
+    "stop": "docker-compose down"
+  },
+  "devDependencies": {
+    "@types/node": "^20"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["sharp", "esbuild"]
+  }
+}

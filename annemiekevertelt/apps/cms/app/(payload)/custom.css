@@ -1,0 +1,17 @@
+/* Custom styles for PayloadCMS admin */
+
+:root {
+  --color-cream: #FDF6E9;
+  --color-warm-brown: #8B7355;
+  --color-gold: #C4A77D;
+  --color-dark-brown: #4A4036;
+  --color-text: #2C2419;
+}
+
+.nav__brand {
+  font-family: Georgia, serif;
+}
+
+.template-default {
+  background-color: var(--color-cream);
+}

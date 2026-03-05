@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "skills": {
+    "coolify": {
+      "version": "2.1.1",
+      "installedAt": 1772669951955
+    },
+    "docker-essentials": {
+      "version": "1.0.0",
+      "installedAt": 1772669955043
+    },
+    "elite-longterm-memory": {
+      "version": "1.2.3",
+      "installedAt": 1772669956838
+    },
+    "discord-hub": {
+      "version": "1.1.0",
+      "installedAt": 1772673970747
+    }
+  }
+}
