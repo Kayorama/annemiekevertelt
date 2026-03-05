@@ -2,9 +2,14 @@ import type { CollectionConfig } from 'payload';
 
 export const Media: CollectionConfig = {
   slug: 'media',
+  labels: {
+    singular: 'Afbeelding',
+    plural: 'Afbeeldingen',
+  },
   admin: {
     useAsTitle: 'filename',
-    group: 'Media',
+    group: '🖼️ Media',
+    description: 'Afbeeldingen voor columns, verhalen en pagina\'s',
   },
   access: {
     read: () => true,
@@ -38,13 +43,19 @@ export const Media: CollectionConfig = {
     {
       name: 'alt',
       type: 'text',
-      label: 'Alt-tekst',
+      label: 'Beschrijving (alt-tekst)',
       required: true,
+      admin: {
+        description: 'Beschrijf wat er op de afbeelding staat (belangrijk voor blinden en zoekmachines)',
+      },
     },
     {
       name: 'caption',
       type: 'textarea',
       label: 'Bijschrift',
+      admin: {
+        description: 'Optioneel onderschrift dat onder de afbeelding kan worden getoond',
+      },
     },
   ],
 };

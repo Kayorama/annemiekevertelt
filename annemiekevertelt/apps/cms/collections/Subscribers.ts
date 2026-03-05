@@ -2,10 +2,16 @@ import type { CollectionConfig } from 'payload';
 
 export const Subscribers: CollectionConfig = {
   slug: 'subscribers',
+  labels: {
+    singular: 'Abonnee',
+    plural: 'Nieuwsbrief-abonnees',
+  },
   admin: {
     useAsTitle: 'email',
     defaultColumns: ['email', 'name', 'subscribedAt', 'status'],
-    group: 'Nieuwsbrief',
+    group: '💌 Nieuwsbrief',
+    description: 'Mensen die zich hebben aangemeld voor de nieuwsbrief',
+    hideAPIURL: true,
   },
   access: {
     create: ({ req: { user } }) => !!user,
@@ -20,11 +26,17 @@ export const Subscribers: CollectionConfig = {
       label: 'E-mailadres',
       required: true,
       unique: true,
+      admin: {
+        description: 'Het e-mailadres van de abonnee',
+      },
     },
     {
       name: 'name',
       type: 'text',
       label: 'Naam',
+      admin: {
+        description: 'Naam van de abonnee (als deze is opgegeven)',
+      },
     },
     {
       name: 'status',
@@ -32,10 +44,13 @@ export const Subscribers: CollectionConfig = {
       label: 'Status',
       defaultValue: 'active',
       options: [
-        { label: 'Actief', value: 'active' },
-        { label: 'Geopteerd', value: 'unsubscribed' },
-        { label: 'Bounced', value: 'bounced' },
+        { label: '✅ Actief - ontvangt nieuwsbrieven', value: 'active' },
+        { label: '❌ Uitgeschreven - geen mails meer', value: 'unsubscribed' },
+        { label: '⚠️ Bounced - e-mail werkt niet', value: 'bounced' },
       ],
+      admin: {
+        description: 'De huidige status van dit e-mailadres',
+      },
     },
     {
       name: 'subscribedAt',
@@ -48,6 +63,7 @@ export const Subscribers: CollectionConfig = {
           pickerAppearance: 'dayAndTime',
           displayFormat: 'd MMMM yyyy, HH:mm',
         },
+        description: 'Automatisch ingevuld - wanneer iemand zich aanmelde',
       },
     },
     {
@@ -60,6 +76,7 @@ export const Subscribers: CollectionConfig = {
           pickerAppearance: 'dayAndTime',
           displayFormat: 'd MMMM yyyy, HH:mm',
         },
+        description: 'Automatisch ingevuld - wanneer iemand zich uitschreef',
       },
     },
   ],

@@ -2,9 +2,14 @@ import type { CollectionConfig } from 'payload';
 
 export const Users: CollectionConfig = {
   slug: 'users',
+  labels: {
+    singular: 'Gebruiker',
+    plural: 'Gebruikers',
+  },
   admin: {
     useAsTitle: 'email',
-    group: 'Systeem',
+    group: '⚙️ Systeem',
+    description: 'Mensen die kunnen inloggen op dit beheerpaneel',
   },
   auth: true,
   fields: [
@@ -12,6 +17,9 @@ export const Users: CollectionConfig = {
       name: 'name',
       type: 'text',
       label: 'Naam',
+      admin: {
+        description: 'Volledige naam van de gebruiker',
+      },
     },
     {
       name: 'role',
@@ -19,9 +27,12 @@ export const Users: CollectionConfig = {
       label: 'Rol',
       defaultValue: 'editor',
       options: [
-        { label: 'Beheerder', value: 'admin' },
-        { label: 'Redacteur', value: 'editor' },
+        { label: '👑 Beheerder - kan alles', value: 'admin' },
+        { label: '✏️ Redacteur - kan content beheren', value: 'editor' },
       ],
+      admin: {
+        description: 'Wat mag deze gebruiker doen?',
+      },
     },
   ],
 };

@@ -2,10 +2,15 @@ import type { CollectionConfig } from 'payload';
 
 export const NewsletterTemplates: CollectionConfig = {
   slug: 'newsletter-templates',
+  labels: {
+    singular: 'Nieuwsbrief',
+    plural: 'Nieuwsbrieven',
+  },
   admin: {
-    useAsTitle: 'subject',
-    defaultColumns: ['subject', 'status', 'createdAt'],
-    group: 'Nieuwsbrief',
+    useAsTitle: 'name',
+    defaultColumns: ['name', 'subject', 'status', 'createdAt'],
+    group: '💌 Nieuwsbrief',
+    description: 'Maak en verstuur nieuwsbrieven naar je abonnees',
   },
   access: {
     create: ({ req: { user } }) => !!user,
@@ -15,18 +20,30 @@ export const NewsletterTemplates: CollectionConfig = {
   },
   fields: [
     {
+      name: 'name',
+      type: 'text',
+      label: 'Naam van nieuwsbrief',
+      required: true,
+      admin: {
+        description: 'Een herkenbare naam voor jezelf (bijv. "Nieuwsbrief maart 2026") - alleen jij ziet dit',
+      },
+    },
+    {
       name: 'subject',
       type: 'text',
-      label: 'Onderwerp',
+      label: 'Onderwerp (e-mail titel)',
       required: true,
+      admin: {
+        description: 'Dit is de titel die mensen in hun inbox zien (bijv. "Nieuwe columns deze week!")',
+      },
     },
     {
       name: 'previewText',
       type: 'text',
-      label: 'Preview tekst',
+      label: 'Voorbeeldtekst',
       maxLength: 150,
       admin: {
-        description: 'Tekst die getoond wordt in de inbox preview',
+        description: 'Korte tekst die wordt getoond in de inbox, na het onderwerp (bijv. "Lees mijn nieuwste verhalen over...")',
       },
     },
     {
@@ -34,12 +51,18 @@ export const NewsletterTemplates: CollectionConfig = {
       type: 'text',
       label: 'Aanhef',
       defaultValue: 'Hallo',
+      admin: {
+        description: 'Hoe begroet je je lezers? (bijv. "Hallo", "Beste lezer", "Hi!")',
+      },
     },
     {
       name: 'content',
       type: 'richText',
       label: 'Inhoud',
       required: true,
+      admin: {
+        description: 'De hoofdtekst van je nieuwsbrief - schrijf hier je bericht',
+      },
     },
     {
       name: 'featuredPosts',
@@ -47,7 +70,10 @@ export const NewsletterTemplates: CollectionConfig = {
       relationTo: ['columns', 'childrens-stories', 'audio-content', 'about-me'],
       hasMany: true,
       maxDepth: 1,
-      label: 'Uitgelichte posts',
+      label: 'Uitgelichte verhalen',
+      admin: {
+        description: 'Kies columns, verhalen of audio-fragmenten die je wilt highlighten in deze nieuwsbrief',
+      },
     },
     {
       name: 'status',
@@ -55,10 +81,14 @@ export const NewsletterTemplates: CollectionConfig = {
       label: 'Status',
       defaultValue: 'draft',
       options: [
-        { label: 'Concept', value: 'draft' },
-        { label: 'Verzonden', value: 'sent' },
-        { label: 'Gepland', value: 'scheduled' },
+        { label: '📝 Concept - nog aan het werk', value: 'draft' },
+        { label: '🚀 Verzonden - naar alle abonnees', value: 'sent' },
+        { label: '⏰ Gepland - wordt automatisch verstuurd', value: 'scheduled' },
       ],
+      admin: {
+        position: 'sidebar',
+        description: 'Huidige status van deze nieuwsbrief',
+      },
     },
     {
       name: 'sentAt',
@@ -66,6 +96,8 @@ export const NewsletterTemplates: CollectionConfig = {
       label: 'Verzonden op',
       admin: {
         readOnly: true,
+        position: 'sidebar',
+        description: 'Automatisch ingevuld',
       },
     },
     {
@@ -74,6 +106,8 @@ export const NewsletterTemplates: CollectionConfig = {
       label: 'Aantal verzonden',
       admin: {
         readOnly: true,
+        position: 'sidebar',
+        description: 'Hoeveel mensen deze nieuwsbrief ontvingen',
       },
     },
   ],

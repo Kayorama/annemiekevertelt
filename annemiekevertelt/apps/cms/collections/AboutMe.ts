@@ -2,100 +2,107 @@ import type { CollectionConfig } from 'payload';
 
 export const AboutMe: CollectionConfig = {
   slug: 'about-me',
+  labels: {
+    singular: 'Hoofdstuk Over Mij',
+    plural: 'Over Mij - Hoofdstukken',
+  },
   admin: {
-    useAsTitle: 'title',
-    defaultColumns: ['title', 'category', 'status', 'publishedDate'],
-    group: 'Content',
+    useAsTitle: 'chapterTitle',
+    defaultColumns: ['chapterTitle', 'category', 'order', 'draft'],
+    group: '📝 Content',
+    description: 'Hoofdstukken voor de "Over Mij" pagina',
   },
   access: {
     read: ({ req: { user } }) => {
       if (user) return true;
       return {
-        status: {
-          equals: 'published',
+        draft: {
+          equals: false,
         },
       };
     },
   },
-  versions: {
-    drafts: true,
-  },
   fields: [
     {
-      name: 'title',
+      name: 'chapterTitle',
       type: 'text',
-      label: 'Titel',
+      label: 'Hoofdstuktitel',
       required: true,
+      admin: {
+        description: 'De titel van dit hoofdstuk (bijv. "Mijn schooltijd", "Hoe ik mijn man ontmoette")',
+      },
     },
     {
       name: 'slug',
       type: 'text',
-      label: 'URL-slug',
+      label: 'Webadres (URL)',
       required: true,
       unique: true,
       admin: {
         position: 'sidebar',
+        description: 'Het webadres van dit hoofdstuk',
       },
     },
     {
       name: 'category',
       type: 'select',
-      label: 'Categorie',
+      label: 'Onderwerp',
       required: true,
       options: [
         { label: '🎓 School & Studie', value: 'school' },
         { label: '💍 Huwelijk & Relaties', value: 'huwelijk' },
-        { label: '👶 Kinderen & Ouders', value: 'kinderen' },
-        { label: '💼 Carrière & Werk', value: 'carriere' },
+        { label: '👶 Kinderen & Ouderschap', value: 'kinderen' },
+        { label: '💼 Werk & Carrière', value: 'carriere' },
         { label: '🌍 Reizen & Avontuur', value: 'reizen' },
-        { label: '🎨 Hobby\'s & Passie', value: 'hobbys' },
+        { label: '🎨 Hobby\'s & Interesses', value: 'hobbys' },
+        { label: '🏠 Mijn Huidige Leven', value: 'huidig' },
+        { label: '💭 Persoonlijke Groei', value: 'groei' },
       ],
       admin: {
-        description: 'Thema-icoon voor deze sectie',
+        position: 'sidebar',
+        description: 'Kies het onderwerp dat het beste past bij dit hoofdstuk',
       },
     },
     {
       name: 'icon',
       type: 'upload',
       relationTo: 'media',
-      label: 'Eigen icoon',
+      label: 'Icoon (icoon-afbeelding)',
       admin: {
-        description: 'Optioneel: vervangt het standaard thema-icoon',
+        description: 'Een klein icoon bij dit hoofdstuk (optioneel - anders wordt een standaard icoon gebruikt)',
       },
-    },
-    {
-      name: 'featuredImage',
-      type: 'upload',
-      relationTo: 'media',
-      label: 'Uitgelichte afbeelding',
-    },
-    {
-      name: 'excerpt',
-      type: 'textarea',
-      label: 'Samenvatting',
-      maxLength: 300,
     },
     {
       name: 'content',
       type: 'richText',
       label: 'Inhoud',
       required: true,
-    },
-    {
-      name: 'status',
-      type: 'select',
-      label: 'Status',
-      defaultValue: 'draft',
-      options: [
-        { label: 'Concept', value: 'draft' },
-        { label: 'Gepubliceerd', value: 'published' },
-      ],
       admin: {
-        position: 'sidebar',
+        description: 'Het verhaal van dit hoofdstuk - schrijf hier over dit deel van je leven',
       },
     },
     {
-      name: 'publishedDate',
+      name: 'order',
+      type: 'number',
+      label: 'Volgorde',
+      admin: {
+        position: 'sidebar',
+        description: 'Nummer om de volgorde te bepalen (lager = eerst). Tip: gebruik 10, 20, 30 zodat je er later makkelijk tussen kunt voegen.',
+      },
+      defaultValue: 10,
+    },
+    {
+      name: 'draft',
+      type: 'checkbox',
+      label: 'Concept (niet publiceren)',
+      defaultValue: true,
+      admin: {
+        position: 'sidebar',
+        description: 'Vinkje = nog niet zichtbaar op de website',
+      },
+    },
+    {
+      name: 'publishDate',
       type: 'date',
       label: 'Publicatiedatum',
       admin: {
@@ -104,17 +111,9 @@ export const AboutMe: CollectionConfig = {
           pickerAppearance: 'dayOnly',
           displayFormat: 'd MMMM yyyy',
         },
+        description: 'Wanneer moet dit online komen?',
       },
       defaultValue: () => new Date().toISOString(),
-    },
-    {
-      name: 'sortOrder',
-      type: 'number',
-      label: 'Sorteervolgorde',
-      admin: {
-        position: 'sidebar',
-        description: 'Lager nummer = eerder in de lijst',
-      },
     },
   ],
 };

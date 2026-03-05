@@ -34,15 +34,19 @@ export default buildConfig({
   },
   editor: lexicalEditor({}),
   collections: [
-    Users,
-    Media,
-    Audio,
+    // Content collections - most used first
     Columns,
     ChildrensStories,
     AudioContent,
     AboutMe,
+    // Media collections
+    Media,
+    Audio,
+    // Newsletter collections
     Subscribers,
     NewsletterTemplates,
+    // System
+    Users,
   ],
   secret: process.env.PAYLOAD_SECRET || 'dev-secret',
   db: postgresAdapter({
